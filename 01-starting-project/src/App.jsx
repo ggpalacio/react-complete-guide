@@ -1,24 +1,19 @@
 import { Fragment } from "react";
 import { CORE_CONCPETS, EXAMPLES } from "./data.js";
-import reactEssentialsPng from './assets/react-core-concepts.png'
 import Section from "./components/Section";
 import Tabs from "./components/Tabs.jsx";
 import Tab from "./components/Tab.jsx";
-import Article from "./components/Article.jsx";
+import CoreConcept from "./components/CoreConcept.jsx";
+import Header from "./components/Header.jsx";
 
 function App() {
   return (
     <div>
-      <Article
-        container="header"
-        image={reactEssentialsPng}
-        title="React Essentials"
-        description="Core React concepts you will need for almost any app you are going to build!"
-      />
+      <Header />
       <main>
         <div>
           <Section title="Core Concepts" id="core-concepts">
-            {CORE_CONCPETS.map((coreConcept, index) => <Article key={index} container="li" headingSize="3" {...coreConcept} />)}
+            {CORE_CONCPETS.map((coreConcept, index) => <CoreConcept key={index} {...coreConcept} />)}
           </Section>
           <Section title="Examples" container={Fragment} id="examples">
             <Tabs>

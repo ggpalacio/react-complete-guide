@@ -1,4 +1,4 @@
-import { Children, useState, use } from "react";
+import { Children, useState } from "react";
 
 export default function Tabs({ children }) {
   const [ selectedIndex, setSelectedIndex ] = useState(0)
