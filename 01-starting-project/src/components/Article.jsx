@@ -1,4 +1,4 @@
-import If from "./if";
+import If from "./If";
 
 export default function Article({ image, title, description, container="article", children, headingSize = 1 }) {
   const Heading = "h" + headingSize;
