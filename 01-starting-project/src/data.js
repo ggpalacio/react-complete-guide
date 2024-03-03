@@ -11,7 +11,7 @@ export const CORE_CONCPETS = [
     },
     {
         "image": jsxUiPng,
-        "title": "JS",
+        "title": "JSX",
         "description": "Return (potentially dynamic) HTML(ish) code to define the actual markup that will be rendered."
     },
     {
@@ -36,7 +36,7 @@ function Welcome() {
 }`,
     },
     {
-        "title": "JS",
+        "title": "JSX",
         "description": "JSX is a syntax extension to JavaScript. It is similar to a template language, but it has full power of JavaScript (e.g., it may output dynamic content).",
         code: `
 <div>
