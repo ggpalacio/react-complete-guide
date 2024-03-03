@@ -3,9 +3,7 @@ export default function Section({title, container="ul", children, ...props}) {
     return (
       <section {...props}>
           <h2>{title}</h2>
-          <Container>
-              {children}
-          </Container>
+          <Container>{children}</Container>
       </section>
     )
 }
