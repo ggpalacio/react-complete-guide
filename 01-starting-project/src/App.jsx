@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import { CORE_CONCPETS, EXAMPLES } from "./data.js";
 import Section from "./components/Section";
 import Tabs from "./components/Tabs.jsx";
@@ -12,13 +11,15 @@ function App() {
       <Header />
       <main>
         <div>
-          <Section title="Core Concepts" id="core-concepts">
+          <Section title="Core Concepts" id="core-concepts" headingSize="2">
             {CORE_CONCPETS.map((coreConcept, index) => <CoreConcept key={index} {...coreConcept} />)}
           </Section>
-          <Section title="Examples" container={Fragment} id="examples">
+          <Section title="Examples" noContainer headingSize="2" id="examples">
             <Tabs>
               {EXAMPLES.map((example, index) => (
-                <Tab id="tab-content" key={index} title={example.title} description={example.description}>
+                <Tab id="tab-content" key={index} name={example.title}>
+                  <h3>{example.title}</h3>
+                  <p>{example.description}</p>
                   <pre>
                     <code>{example.code}</code>
                   </pre>

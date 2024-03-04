@@ -12,7 +12,7 @@ export default function Tabs({ children }) {
       <button
         className={index == selectedIndex ? 'active' : undefined}
         onClick={() => handleButtonClick(index)}>
-        {child.props.title}
+        {child.props.name}
       </button>
     </li>
   ))

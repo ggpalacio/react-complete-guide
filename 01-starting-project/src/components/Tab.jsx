@@ -1,8 +1,6 @@
-export default function Tab({ title, description, children, ...props }) {
+export default function Tab({ name, children, ...props }) {
   return (
     <div {...props}>
-      <h3>{title}</h3>
-      <p>{description}</p>
       {children}
     </div>
   );
