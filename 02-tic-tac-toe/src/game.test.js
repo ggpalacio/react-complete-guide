@@ -1,69 +1,82 @@
 import { test, expect } from '@jest/globals'
-import TicTacToe, { Square } from './game';
-import exp from 'constants';
+import TicTacToe, { Symbol } from './game';
 
 test('should create a game successfully', () => {
     const expectedBoard = [
-        [Square.EMPTY, Square.EMPTY, Square.EMPTY],
-        [Square.EMPTY, Square.EMPTY, Square.EMPTY],
-        [Square.EMPTY, Square.EMPTY, Square.EMPTY]
+        [null, null, null],
+        [null, null, null],
+        [null, null, null]
     ]
     
     const expectedPlayers = new Map([
-        [Square.X, "Player 1"],
-        [Square.O, "Player 2"]
+        [Symbol.X, "Player 1"],
+        [Symbol.O, "Player 2"]
     ])
 
     const game = new TicTacToe();
     expect(game.board).toEqual(expectedBoard);
     expect(game.players).toEqual(expectedPlayers);
-    expect(game.currenctPlayer).toBe(Square.X);
+    expect(game.currenctPlayer).toBe(Symbol.X);
     expect(game.turns).toHaveLength(0);
     expect(game.winner).toBeNull();
 });
 
+test('should set player name successfully', () => {
+    const game = new TicTacToe()
+    expect(game.getPlayerName(Symbol.X)).toBe("Player 1")
+    expect(game.getPlayerName(Symbol.O)).toBe("Player 2")
+
+    game.setPlayerName(Symbol.X, 'Player X')
+    expect(game.getPlayerName(Symbol.X)).toBe("Player X")
+    expect(game.getPlayerName(Symbol.O)).toBe("Player 2")
+
+    game.setPlayerName(Symbol.O, 'Player O')
+    expect(game.getPlayerName(Symbol.X)).toBe("Player X")
+    expect(game.getPlayerName(Symbol.O)).toBe("Player O")
+})
+
 test('should mark a square successfully', () => {
     let expectedBoard = [
-        [Square.EMPTY, Square.EMPTY, Square.EMPTY],
-        [Square.EMPTY, Square.EMPTY, Square.EMPTY],
-        [Square.EMPTY, Square.EMPTY, Square.EMPTY]
+        [null, null, null],
+        [null, null, null],
+        [null, null, null]
     ]
 
     const game = new TicTacToe();
     expect(game.board).toEqual(expectedBoard);
-    expect(game.currenctPlayer).toBe(Square.X);
+    expect(game.currenctPlayer).toBe(Symbol.X);
     expect(game.turns).toHaveLength(0);
 
     expectedBoard = [
-        [Square.X, Square.EMPTY, Square.EMPTY],
-        [Square.EMPTY, Square.EMPTY, Square.EMPTY],
-        [Square.EMPTY, Square.EMPTY, Square.EMPTY]
+        [Symbol.X, null, null],
+        [null, null, null],
+        [null, null, null]
     ]
     game.markSquare(0, 0)
     expect(game.board).toEqual(expectedBoard);
-    expect(game.currenctPlayer).toBe(Square.O);
+    expect(game.currenctPlayer).toBe(Symbol.O);
     expect(game.turns).toHaveLength(1);
     expect(game.turns[0]).toBe('Player 1 marks X in square at position (0,0)');
 
     expectedBoard = [
-        [Square.X, Square.EMPTY, Square.EMPTY],
-        [Square.EMPTY, Square.O, Square.EMPTY],
-        [Square.EMPTY, Square.EMPTY, Square.EMPTY]
+        [Symbol.X, null, null],
+        [null, Symbol.O, null],
+        [null, null, null]
     ]
     game.markSquare(1, 1)
     expect(game.board).toEqual(expectedBoard);
-    expect(game.currenctPlayer).toBe(Square.X);
+    expect(game.currenctPlayer).toBe(Symbol.X);
     expect(game.turns).toHaveLength(2);
     expect(game.turns[1]).toBe('Player 2 marks O in square at position (1,1)');
 
     expectedBoard = [
-        [Square.X, Square.EMPTY, Square.EMPTY],
-        [Square.EMPTY, Square.O, Square.EMPTY],
-        [Square.EMPTY, Square.EMPTY, Square.X]
+        [Symbol.X, null, null],
+        [null, Symbol.O, null],
+        [null, null, Symbol.X]
     ]
     game.markSquare(2, 2)
     expect(game.board).toEqual(expectedBoard);
-    expect(game.currenctPlayer).toBe(Square.O);
+    expect(game.currenctPlayer).toBe(Symbol.O);
     expect(game.turns).toHaveLength(3);
     expect(game.turns[2]).toBe('Player 1 marks X in square at position (2,2)');
 });
@@ -85,44 +98,44 @@ test('should not mark a square already marked', () => {
 test('should have a winner', () => {
     const expectedBoards = [
         [
-            [Square.X, Square.O, Square.EMPTY],
-            [Square.X, Square.O, Square.EMPTY],
-            [Square.X, Square.EMPTY, Square.EMPTY]
+            [Symbol.X, Symbol.O, null],
+            [Symbol.X, Symbol.O, null],
+            [Symbol.X, null, null]
         ],
         [
-            [Square.EMPTY, Square.X, Square.O],
-            [Square.EMPTY, Square.X, Square.O],
-            [Square.EMPTY, Square.X, Square.EMPTY]
+            [null, Symbol.X, Symbol.O],
+            [null, Symbol.X, Symbol.O],
+            [null, Symbol.X, null]
         ],
         [
-            [Square.O, Square.EMPTY, Square.X],
-            [Square.O, Square.EMPTY, Square.X],
-            [Square.EMPTY, Square.EMPTY, Square.X]
+            [Symbol.O, null, Symbol.X],
+            [Symbol.O, null, Symbol.X],
+            [null, null, Symbol.X]
         ],
         [
-            [Square.O, Square.O, Square.O],
-            [Square.X, Square.EMPTY, Square.EMPTY],
-            [Square.EMPTY, Square.X, Square.X]
+            [Symbol.O, Symbol.O, Symbol.O],
+            [Symbol.X, null, null],
+            [null, Symbol.X, Symbol.X]
         ],
         [
-            [Square.X, Square.EMPTY, Square.EMPTY],
-            [Square.O, Square.O, Square.O],
-            [Square.EMPTY, Square.X, Square.X]
+            [Symbol.X, null, null],
+            [Symbol.O, Symbol.O, Symbol.O],
+            [null, Symbol.X, Symbol.X]
         ],
         [
-            [Square.X, Square.EMPTY, Square.EMPTY],
-            [Square.EMPTY, Square.X, Square.X],
-            [Square.O, Square.O, Square.O]
+            [Symbol.X, null, null],
+            [null, Symbol.X, Symbol.X],
+            [Symbol.O, Symbol.O, Symbol.O]
         ],
         [
-            [Square.X, Square.EMPTY, Square.EMPTY],
-            [Square.EMPTY, Square.X, Square.EMPTY],
-            [Square.O, Square.O, Square.X]
+            [Symbol.X, null, null],
+            [null, Symbol.X, null],
+            [Symbol.O, Symbol.O, Symbol.X]
         ],
         [
-            [Square.X, Square.EMPTY, Square.O],
-            [Square.EMPTY, Square.O, Square.EMPTY],
-            [Square.O, Square.X, Square.X]
+            [Symbol.X, null, Symbol.O],
+            [null, Symbol.O, null],
+            [Symbol.O, Symbol.X, Symbol.X]
         ],
     ]
 
@@ -131,8 +144,8 @@ test('should have a winner', () => {
         const turns = extractTurnsFromBoard(expectedBoard)
 
         let currentPlayer;
-        while(turns.get(Square.X).length > 0 || turns.get(Square.O).length > 0) {
-            currentPlayer = currentPlayer == Square.X ? Square.O : Square.X
+        while(turns.get(Symbol.X).length > 0 || turns.get(Symbol.O).length > 0) {
+            currentPlayer = currentPlayer == Symbol.X ? Symbol.O : Symbol.X
             expect(game.currenctPlayer).toBe(currentPlayer);
             expect(game.winner).toBeNull;
             game.markSquare(...turns.get(currentPlayer).pop())
@@ -145,15 +158,15 @@ test('should have a winner', () => {
 
 function extractTurnsFromBoard(board) {
     const turns = new Map()
-    turns.set(Square.X, [])
-    turns.set(Square.O, [])
+    turns.set(Symbol.X, [])
+    turns.set(Symbol.O, [])
 
     for (let x = 0; x < board.length; x++) {
         for (let y = 0; y < board[x].length; y++) {
-            if (board[x][y] == Square.X) {
-                turns.get(Square.X).push([x,y])
-            } else if (board[x][y] == Square.O) {
-                turns.get(Square.O).push([x,y])
+            if (board[x][y] == Symbol.X) {
+                turns.get(Symbol.X).push([x,y])
+            } else if (board[x][y] == Symbol.O) {
+                turns.get(Symbol.O).push([x,y])
             }
         }
     }
