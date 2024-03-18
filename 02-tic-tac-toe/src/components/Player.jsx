@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import IO from './IO';
+import Input from './Input';
 
 export default function Player({isActive, name, symbol, onEditClick}) {
     const [playerName,setPlayerName] = useState(name)
@@ -15,7 +15,7 @@ export default function Player({isActive, name, symbol, onEditClick}) {
     return (
         <li className={isActive ? 'active' : undefined}>
             <span className="player">
-                <IO value={playerName} setValue={setPlayerName} isEditing={isEditing} className="player-name" />
+                <Input value={playerName} setValue={setPlayerName} readonly={!isEditing} className="player-name" />
                 <span className="player-symbol">{symbol.value}</span>
             </span>
             <button onClick={handleClick}>{isEditing ? 'Save' : 'Edit'}</button>

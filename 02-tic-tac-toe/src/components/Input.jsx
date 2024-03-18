@@ -1,4 +1,4 @@
-export default function IO({value, setValue, isEditing, output='span', ...props}) {
+export default function Input({value, setValue, readonly, output='span', ...props}) {
     const Output = output
 
     function handleOnChange(event) {
@@ -7,7 +7,7 @@ export default function IO({value, setValue, isEditing, output='span', ...props}
         }
     }
 
-    if (isEditing) {
+    if (!readonly) {
         return <input type="text" {...props} value={value} onChange={handleOnChange} />
     }
     return <Output {...props}>{value}</Output>
