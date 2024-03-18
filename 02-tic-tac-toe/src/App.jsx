@@ -1,13 +1,16 @@
+import GameBoard from "./components/GameBoard"
 import Player from "./components/Player"
-import {useState} from "react"
-import TicTacToe, { Symbol } from "./game"
+import { Symbol, useGame } from "./game"
 
 function App() {
-  const [game,setGame] = useState(new TicTacToe())
+  const game = useGame()
 
-  function onSavePlayerName(symbol, name) {
+  function handleEditClick(symbol, name) {
     game.setPlayerName(symbol, name)
-    setGame(game)
+  }
+
+  function handleSquareClick(rowIndex, colIndex) {
+    game.markSquare(rowIndex, colIndex)
   }
 
   return (
@@ -17,14 +20,15 @@ function App() {
           <Player
             name={game.getPlayerName(Symbol.X)}
             symbol={Symbol.X}
-            handleEditClick={onSavePlayerName}
+            onEditClick={handleEditClick}
           />
           <Player
             name={game.getPlayerName(Symbol.O)}
             symbol={Symbol.O}
-            handleEditClick={onSavePlayerName}
+            onEditClick={handleEditClick}
           />
         </ol>
+        <GameBoard board={game.getBoard()} onSquareClick={handleSquareClick} />
       </div>
     </main>
   )

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 export class Symbol {
     static X = new Symbol('X');
     static O = new Symbol('O');
@@ -7,82 +9,93 @@ export class Symbol {
     }
 }
 
-export default class TicTacToe {
-    constructor() {
-        this.board = [
+export function useGame() {
+    const [state,setState] = useState({
+        board: [
             [null, null, null],
             [null, null, null],
             [null, null, null]
-        ]
-        this.players = new Map()
-        this.players.set(Symbol.X, 'Player 1')
-        this.players.set(Symbol.O, 'Player 2')
-        this.currenctPlayer = Symbol.X
-        this.turns = []
-        this.winner = null
+        ],
+        players: new Map([
+            [Symbol.X, 'Player 1'],
+            [Symbol.O, 'Player 2']
+        ]),
+        currentPlayer: Symbol.X,
+        turns: [],
+        winner: null,
+        gameOver: false,
+    })
+
+    function setPlayerName(symbol, name) {
+        state.players.set(symbol, name)
+        setState({...state})
     }
 
-    setPlayerName(symbol, name) {
-        this.players.set(symbol, name)
+    function getPlayerName(symbol) {
+        return state.players.get(symbol)
     }
 
-    getPlayerName(symbol) {
-        return this.players.get(symbol)
+    function getBoard() {
+        return state.board
     }
 
-    markSquare(x, y) {
-        if (this.winner) {
+    function markSquare(x, y) {
+        if (state.gameOver) {
             throw new Error('the game is over');
         }
         if (x < 0 || y < 0) {
             throw new Error(`position indexes must be greater or equal than 0`);
         }
-        if (x >= this.board.length || y >= this.board.length) {
-            throw new Error(`position indexes must be smaller than ${this.board.length}`);
+        if (x >= state.board.length || y >= state.board.length) {
+            throw new Error(`position indexes must be smaller than ${state.board.length}`);
         }
-        if (this.board[x][y]) {
+        if (state.board[x][y]) {
             throw new Error(`square at position (${x},${y}) is not empty`);
         }
 
-        this.board[x][y] = this.currenctPlayer
-        this.turns.push(`${this.players.get(this.currenctPlayer)} marks ${this.currenctPlayer.value} in square at position (${x},${y})`) 
+        state.board[x][y] = state.currentPlayer
+        state.turns.push(`${state.players.get(state.currentPlayer)} marks ${state.currentPlayer.value} in square at position (${x},${y})`) 
 
-        if (checkWinner(this.board)) {
-            this.winner = this.currenctPlayer
-            this.currenctPlayer = null
+        if (checkWinner(state.board)) {
+            state.winner = state.currentPlayer
+            state.currentPlayer = null
+            state.gameOver = true
         } else {
-            this.currenctPlayer = this.currenctPlayer == Symbol.X ? Symbol.O : Symbol.X
+            state.currentPlayer = state.currentPlayer == Symbol.X ? Symbol.O : Symbol.X
         }
+        setState({...state})
     }
-}
 
-function checkWinner(board) {
-    const winnerPositions = [
-        [[0,0],[0,1],[0,2]],
-        [[1,0],[1,1],[1,2]],
-        [[2,0],[2,1],[2,2]],
-        [[0,0],[1,0],[2,0]],
-        [[0,1],[1,1],[2,1]],
-        [[0,2],[1,2],[2,2]],
-        [[0,0],[1,1],[2,2]],
-        [[0,2],[1,1],[2,0]],
-    ]
-
-    for (let i = 0; i < winnerPositions.length; i++) {
-        let lastPosition;
-        let hasWinner = true
-        for (let j = 0; j < winnerPositions[i].length; j++) {
-            const [x,y] = winnerPositions[i][j]
-            if (!lastPosition) {
-                hasWinner = hasWinner && board[x][y]
-            } else {
-                hasWinner = hasWinner && board[x][y] == board[lastPosition[0]][lastPosition[1]]
+    function checkWinner(board) {
+        const winnerPositions = [
+            [[0,0],[0,1],[0,2]],
+            [[1,0],[1,1],[1,2]],
+            [[2,0],[2,1],[2,2]],
+            [[0,0],[1,0],[2,0]],
+            [[0,1],[1,1],[2,1]],
+            [[0,2],[1,2],[2,2]],
+            [[0,0],[1,1],[2,2]],
+            [[0,2],[1,1],[2,0]],
+        ]
+    
+        for (let i = 0; i < winnerPositions.length; i++) {
+            let lastPosition;
+            let hasWinner = true
+            for (let j = 0; j < winnerPositions[i].length; j++) {
+                const [x,y] = winnerPositions[i][j]
+                if (!lastPosition) {
+                    hasWinner = hasWinner && board[x][y]
+                } else {
+                    hasWinner = hasWinner && board[x][y] == board[lastPosition[0]][lastPosition[1]]
+                }
+                lastPosition = winnerPositions[i][j]
             }
-            lastPosition = winnerPositions[i][j]
+            if (hasWinner) {
+                return true
+            }
         }
-        if (hasWinner) {
-            return true
-        }
+        return false
     }
-    return false
+
+    return {...state, setPlayerName, getPlayerName, markSquare, getBoard}
 }
