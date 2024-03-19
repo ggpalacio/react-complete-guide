@@ -35,8 +35,29 @@ export function useGame() {
         return state.players.get(symbol)
     }
 
-    function getBoard() {
-        return state.board
+    function getWinnerName() {
+        if (state.gameOver && state.winner) {
+            return getPlayerName(state.winner)
+        }
+        return null
+    }
+
+    function rematch() {
+        setState({
+            board: [
+                [null, null, null],
+                [null, null, null],
+                [null, null, null]
+            ],
+            players: new Map([
+                [Symbol.X, 'Player 1'],
+                [Symbol.O, 'Player 2']
+            ]),
+            currentPlayer: Symbol.X,
+            turns: [],
+            winner: null,
+            gameOver: false,
+        })
     }
 
     function markSquare(x, y) {
@@ -58,6 +79,9 @@ export function useGame() {
 
         if (checkWinner(state.board)) {
             state.winner = state.currentPlayer
+            state.currentPlayer = null
+            state.gameOver = true
+        } else if (state.turns.length == (state.board.length*state.board.length)) {
             state.currentPlayer = null
             state.gameOver = true
         } else {
@@ -97,5 +121,5 @@ export function useGame() {
         return false
     }
 
-    return {...state, setPlayerName, getPlayerName, markSquare, getBoard}
+    return {...state, setPlayerName, getPlayerName, markSquare, getWinnerName, rematch}
 }

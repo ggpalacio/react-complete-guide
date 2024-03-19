@@ -1,6 +1,8 @@
 import GameBoard from "./components/GameBoard"
+import GameLog from "./components/GameLog"
+import GameOver from "./components/GameOver"
 import Player from "./components/Player"
-import { Symbol, useGame } from "./game"
+import { Symbol, useGame } from "./hooks/game"
 
 function App() {
   const game = useGame()
@@ -13,6 +15,10 @@ function App() {
     game.markSquare(rowIndex, colIndex)
   }
 
+  function handleRestart() {
+    game.rematch()
+  }
+
   return (
     <main>
       <div id="game-container">
@@ -20,16 +26,20 @@ function App() {
           <Player
             name={game.getPlayerName(Symbol.X)}
             symbol={Symbol.X}
+            isActive={game.currentPlayer == Symbol.X}
             onEditClick={handleEditClick}
           />
           <Player
             name={game.getPlayerName(Symbol.O)}
             symbol={Symbol.O}
+            isActive={game.currentPlayer == Symbol.O}
             onEditClick={handleEditClick}
           />
         </ol>
-        <GameBoard board={game.getBoard()} onSquareClick={handleSquareClick} />
+        {game.gameOver && <GameOver winner={game.getWinnerName()} onRestart={handleRestart} />}
+        <GameBoard board={game.board} onSquareClick={handleSquareClick} />
       </div>
+      <GameLog turns={game.turns} />
     </main>
   )
 }
