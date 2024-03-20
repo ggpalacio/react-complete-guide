@@ -9,8 +9,10 @@ export class Symbol {
     }
 }
 
-export function useGame() {
-    const [state,setState] = useState({
+const MAX_TURNS_SIZE = 9
+
+function initialState() {
+    return {
         board: [
             [null, null, null],
             [null, null, null],
@@ -24,7 +26,11 @@ export function useGame() {
         turns: [],
         winner: null,
         gameOver: false,
-    })
+    }
+}
+
+export function useGame() {
+    const [state,setState] = useState(initialState())
 
     function setPlayerName(symbol, name) {
         state.players.set(symbol, name)
@@ -43,21 +49,7 @@ export function useGame() {
     }
 
     function rematch() {
-        setState({
-            board: [
-                [null, null, null],
-                [null, null, null],
-                [null, null, null]
-            ],
-            players: new Map([
-                [Symbol.X, 'Player 1'],
-                [Symbol.O, 'Player 2']
-            ]),
-            currentPlayer: Symbol.X,
-            turns: [],
-            winner: null,
-            gameOver: false,
-        })
+        setState(initialState())
     }
 
     function markSquare(x, y) {
@@ -79,9 +71,9 @@ export function useGame() {
 
         if (checkWinner(state.board)) {
             state.winner = state.currentPlayer
-            state.currentPlayer = null
-            state.gameOver = true
-        } else if (state.turns.length == (state.board.length*state.board.length)) {
+        }
+        
+        if (state.winner || state.turns.length == MAX_TURNS_SIZE) {
             state.currentPlayer = null
             state.gameOver = true
         } else {

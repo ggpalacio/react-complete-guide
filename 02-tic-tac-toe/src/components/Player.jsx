@@ -1,9 +1,14 @@
-import {useState} from 'react';
+import { useState} from 'react';
 import Input from './Input';
 
 export default function Player({isActive, name, symbol, onEditClick}) {
     const [playerName,setPlayerName] = useState(name)
     const [isEditing,setIsEditing] = useState(false)
+
+
+    function handleOnChange(event) {
+        setPlayerName(event.target.value.toUpperCase())
+    }
 
     function handleClick() {
         if (isEditing) {
@@ -15,7 +20,7 @@ export default function Player({isActive, name, symbol, onEditClick}) {
     return (
         <li className={isActive ? 'active' : undefined}>
             <span className="player">
-                <Input value={playerName} setValue={setPlayerName} readonly={!isEditing} className="player-name" />
+                <Input value={playerName} readonly={!isEditing} className="player-name" onChange={handleOnChange} />
                 <span className="player-symbol">{symbol.value}</span>
             </span>
             <button onClick={handleClick}>{isEditing ? 'Save' : 'Edit'}</button>
